@@ -36,6 +36,14 @@ const getImages = (query) => {
     .catch(err => console.log(err))
 }
 
+//image showing after enter button pressing
+const input = document.getElementById("search");
+input.addEventListener("keypress", function(event){
+  if(event.key == 'Enter'){
+    document.getElementById("search-btn").click();
+  }
+});
+
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;

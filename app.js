@@ -17,11 +17,14 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 // preloader
 const preloader = () =>{
   const spinner = document.getElementById("loading-spinner");
-  spinner.classList.toggle('d-none')
+  const gallery = document.getElementById("gallery");
+  spinner.classList.toggle('d-none');
+  gallery.classList.toggle('d-none');
 }
 
 // show images 
 const showImages = (images) => {
+  preloader();
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
   // show gallery title
@@ -32,7 +35,6 @@ const showImages = (images) => {
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
     gallery.appendChild(div)
-    preloader();
   })
 
 }
@@ -57,12 +59,15 @@ let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
   element.classList.add('added');
- 
+
   let item = sliders.indexOf(img);
+
   if (item === -1) {
     sliders.push(img);
   } else {
-    alert('Hey, Already added !')
+    // alert('Hey, Already added !')
+    sliders.splice(item, 1)
+    element.classList.remove('added')
   }
 }
 var timer
@@ -85,7 +90,7 @@ const createSlider = () => {
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
+  let duration = document.getElementById('duration').value || 1000;
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
@@ -93,9 +98,12 @@ const createSlider = () => {
     src="${slide}"
     alt="">`;
     sliderContainer.appendChild(item)
-   
-
   })
+
+  if(duration < 0){//if sliding timing is negative 
+    duration = 1000
+  }
+
   changeSlide(0)
   timer = setInterval(function () {
     slideIndex++;
